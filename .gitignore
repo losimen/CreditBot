@@ -19,3 +19,4 @@ creds.json
 /handlers/menus/__pycache__/
 /keyboards/__pycache__/
 logs.txt
+config.py
