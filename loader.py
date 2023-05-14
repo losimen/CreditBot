@@ -8,5 +8,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-bot = Bot(token=config.TOKEN)
+bot = Bot(token=config.TOKEN,
+          parse_mode='HTML')
 dp = Dispatcher(bot)
