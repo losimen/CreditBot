@@ -4,6 +4,7 @@ from aiogram import types
 from loader import dp, logger
 
 from FSM.expense_fsm import fsm_start_expense_form
+from FSM.income_fsm import fsm_start_income_form
 
 async def delete_message(message: types.Message):
     try:
@@ -23,7 +24,7 @@ async def main_menu_callback(callback: types.CallbackQuery):
     if callback_data == 'mainMenu_addExpense':
         await fsm_start_expense_form(callback.message)
     elif callback_data == 'mainMenu_addIncome':
-        pass
+        await fsm_start_income_form(callback.message)
     elif callback_data == 'mainMenu_showBalance':
         pass
 

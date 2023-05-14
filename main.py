@@ -6,11 +6,13 @@ from config import ADMIN_ID
 
 from handlers import user_commands
 from FSM import expense_fsm
+from FSM import income_fsm
 from keyboards.callback_handlers import user_callbacks
 
 user_commands.register_messages_client(dp)
 expense_fsm.register_handlers_expense_fsm(dp)
 user_callbacks.register_user_callback(dp)
+income_fsm.register_handlers_income_fsm(dp)
 
 
 async def on_startup(dp: Dispatcher):

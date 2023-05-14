@@ -1,7 +1,7 @@
 from datetime import datetime
 from db.types.type_interface import IType
 
-class Expense(IType):
+class Income(IType):
     user_id: int
     amount: float
     description: str
@@ -17,6 +17,6 @@ class Expense(IType):
         return self.__dict__
 
     @staticmethod
-    def from_dict(obj) -> 'Expense':
-        expense = Expense(obj['user_id'], obj['amount'], obj['description'], obj['date'])
+    def from_dict(obj) -> 'Income':
+        expense = Income(obj['user_id'], obj['amount'], obj['description'], obj['date'])
         return expense
