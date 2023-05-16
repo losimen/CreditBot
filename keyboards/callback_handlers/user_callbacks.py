@@ -1,10 +1,19 @@
+from datetime import datetime
+
 from aiogram.dispatcher.filters import Text
 from aiogram import types
 
+from helpers import generate_user_history_day
+from keyboards.keyboards_generator import user_keyboards
 from loader import dp, logger
 
 from FSM.expense_fsm import fsm_start_expense_form
 from FSM.income_fsm import fsm_start_income_form
+from menus import user_menus
+from menus.user_menus import user_balance_menu
+from system_functions.callback_procedures import switch_day
+from system_functions.date_worker import get_current_datetime, add_months
+
 
 async def delete_message(message: types.Message):
     try:
@@ -26,8 +35,31 @@ async def main_menu_callback(callback: types.CallbackQuery):
     elif callback_data == 'mainMenu_addIncome':
         await fsm_start_income_form(callback.message)
     elif callback_data == 'mainMenu_showBalance':
-        pass
+        date = get_current_datetime()
+        await user_balance_menu(callback.message, callback.from_user.id, date)
 
+@dp.callback_query_handler(Text(startswith='controllerMenu'))
+async def controller_menu(callback: types.CallbackQuery):
+    split_call = callback.data.split('_')
+    call_ = split_call[1]
+    user_id = split_call[2]
+    date = split_call[3]
+
+    if call_ == 'dayUp':
+        await delete_message(callback.message)
+        await switch_day(callback.message, True, user_id, date)
+    elif call_ == 'dayDown':
+        await delete_message(callback.message)
+        await switch_day(callback.message, False, user_id, date)
+    elif call_ == 'getInfo':
+        await callback.message.edit_text(text=f"{callback.message.text}\n\n {await generate_user_history_day(user_id, date)}",
+                                         reply_markup=user_menus.keyboard_generator.date_controller_markup(user_id, date, True))
+    elif call_ == 'monthRight':
+        await delete_message(callback.message)
+        await user_menus.user_balance_menu(callback.message, user_id, add_months(date, 1))
+    elif call_ == 'monthLeft':
+        await delete_message(callback.message)
+        await user_menus.user_balance_menu(callback.message, user_id, add_months(date, -1))
 
 def register_user_callback(dp):
     dp.register_callback_query_handler(main_menu_callback, Text(startswith='mainMenu'))
