@@ -1,11 +1,8 @@
-from datetime import datetime
-
 from aiogram.dispatcher.filters import Text
 from aiogram import types
 
 from helpers import generate_user_history_day
-from keyboards.keyboards_generator import user_keyboards
-from loader import dp, logger, bot
+from loader import dp, bot
 
 from FSM.expense_fsm import fsm_start_expense_form
 from FSM.income_fsm import fsm_start_income_form
