@@ -5,7 +5,7 @@ from aiogram import types
 
 from helpers import generate_user_history_day
 from keyboards.keyboards_generator import user_keyboards
-from loader import dp, logger
+from loader import dp, logger, bot
 
 from FSM.expense_fsm import fsm_start_expense_form
 from FSM.income_fsm import fsm_start_income_form
@@ -23,8 +23,7 @@ async def delete_message(message: types.Message):
 
 
 async def void_call(callback: types.CallbackQuery):
-    pass
-
+    await bot.answer_callback_query(callback.id, text='Ця кнопка нічого не робить 😅')
 
 async def main_menu_callback(callback: types.CallbackQuery):
     await callback.message.delete()
@@ -40,25 +39,23 @@ async def main_menu_callback(callback: types.CallbackQuery):
 
 @dp.callback_query_handler(Text(startswith='controllerMenu'))
 async def controller_menu(callback: types.CallbackQuery):
+    await delete_message(callback.message)
+
     split_call = callback.data.split('_')
     call_ = split_call[1]
-    user_id = split_call[2]
+    user_id = int(split_call[2])
     date = split_call[3]
 
     if call_ == 'dayUp':
-        await delete_message(callback.message)
         await switch_day(callback.message, True, user_id, date)
     elif call_ == 'dayDown':
-        await delete_message(callback.message)
         await switch_day(callback.message, False, user_id, date)
     elif call_ == 'getInfo':
-        await callback.message.edit_text(text=f"{callback.message.text}\n\n {await generate_user_history_day(user_id, date)}",
-                                         reply_markup=user_menus.keyboard_generator.date_controller_markup(user_id, date, True))
+        await callback.message.answer(text=f"{callback.message.text}\n\n {await generate_user_history_day(str(user_id), date)}",
+                                      reply_markup=user_menus.keyboard_generator.date_controller_markup(user_id, date, True))
     elif call_ == 'monthRight':
-        await delete_message(callback.message)
         await user_menus.user_balance_menu(callback.message, user_id, add_months(date, 1))
     elif call_ == 'monthLeft':
-        await delete_message(callback.message)
         await user_menus.user_balance_menu(callback.message, user_id, add_months(date, -1))
 
 def register_user_callback(dp):

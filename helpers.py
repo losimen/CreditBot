@@ -32,32 +32,39 @@ async def generate_user_history_day(user_id: str, date: str):
     if len(history_income) == 0 and len(history_expense) == 0:
         day_text += f"⚠️ <b>Немає</b> інформації на цей день"
     else:
-        day_text += f"----------- Доходи 📲 -----------\n\n"
+        day_text += f"- 💸<b>Доходи:</b>\n"
         day_income = 0
-        for income in history_income:
-            day_text += f"+{income.amount}🪙 {income.description} \n"
-            day_income += int(income.amount)
-        day_text += f"\n 📈 Загальний дохід: <b>+{day_income}</b>🪙\n"
-        day_text += "---------------------------------\n\n\n"
 
-        day_text += f"----------- Витрати 📲 -----------\n\n"
+        if len(history_income) == 0:
+            day_text += f"😔 <b>Немає</b> доходів на цей день\n\n"
+        else:
+            for index, income in enumerate(history_income):
+                day_text += f" <b>[{index+1}]</b> {income.description}  <code>+{income.amount}</code>🪙  \n"
+                day_income += int(income.amount)
+            day_text += f"\n📈 Загальні доходи: <b>+{day_income}</b>🪙\n\n"
+
+        day_text += f"- 🧑🏿‍🦱<b>Витрати:</b>\n"
         day_expense = 0
-        for expense in history_expense:
-            day_text += f"-{expense.amount}🪙 {expense.description} \n"
-            day_expense += int(expense.amount)
-        day_text += f"\n 📉 Загальна витрата: <b>-{day_expense}</b>🪙\n"
-        day_text += "---------------------------------\n\n\n"
 
-        day_text += f" 📊 Загальний баланс: <b>{(day_income - day_expense):+}</b>🪙"
+        if len(history_expense) == 0:
+            day_text += f"🥳 <b>Немає</b> витрат на цей день"
+        else:
+            for index, expense in enumerate(history_expense):
+                day_text += f" <b>[{index+1}]</b> {expense.description} <code>-{expense.amount}</code>🪙  \n"
+                day_expense += int(expense.amount)
+            day_text += f"\n📉 Загальні витрати: <b>-{day_expense}</b>🪙\n\n"
+
+        day_text += f"📊Баланс за день: <b>{(day_income - day_expense):+}</b>🪙"
+
     text = f"⬇️ Інформація, яку я <b>знайшов</b> за <b>{date.split(' ')[0]}</b> ⬇️\n\n{day_text}️"
     return text
 
 
-def roll_switcher(isPlus, current_index, len_of_list):
+def roll_switcher(is_plus, current_index, len_of_list):
     if current_index == -1:
         return 0
 
-    if isPlus:
+    if is_plus:
         if current_index == 0:
             future_link = len_of_list - 1
         else:
