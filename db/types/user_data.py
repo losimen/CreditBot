@@ -1,5 +1,6 @@
 from db.types.type_interface import IType
 
+
 class UserData(IType):
     _id: int
     first_name: str

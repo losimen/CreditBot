@@ -1,11 +1,12 @@
 from aiogram import types
 import keyboards.keyboards_generator.user_keyboards as keyboard_generator
+import excel.excel_generator as excel_generator
 
 from db.queries.insert_query import insert_user
-from db.queries.get_query import get_user_data
-
+from db.queries.get_query import get_user_data, get_user_history_for_all_time
 from db.types.user_data import UserData
-from helpers import generate_user_history_days
+from helpers import generate_user_history_days, type_report
+from system_functions.date_worker import get_current_datetime
 
 
 async def main_menu_menu(message: types.Message):
@@ -37,3 +38,15 @@ async def user_report_menu(message: types.Message):
     await message.answer(text='Оберіть найбільш <b>зручний</b> для вас <b>звіт</b> за <b>весь</b> час 📊\n\n'
                               'Виберіть потрібний пункт меню 👇🏻',
                          reply_markup=keyboard_generator.user_report_markup())
+
+
+async def user_report_menu_report(message: types.Message, type: str):
+    data_all = await get_user_history_for_all_time(message.chat.id)
+    if type == 'date':
+        data_all = sorted(data_all, key=lambda x: x.date)
+    if type == 'amount':
+        data_all = sorted(data_all, key=lambda x: int(x.amount))[::-1]
+
+    excel_generator.create_file(message.chat.id, data_all, type)
+    await message.answer_document(document=open(f'./reports/{type}-{message.chat.id}.xlsx', 'rb'), caption=f'<b>{type_report[type]}</b> - {get_current_datetime()[:-13]}')
+    await main_menu_menu(message)

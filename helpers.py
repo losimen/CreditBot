@@ -1,5 +1,11 @@
 from db.queries.get_query import get_user_incomes_for_day, get_user_history_for_month, get_user_expenses_for_day
-from system_functions.date_worker import extract_days, extract_month_name, extract_year, get_str_datetime, extract_time
+from system_functions.date_worker import extract_days, extract_month_name, extract_year, get_str_datetime
+
+type_report = {
+    'default': 'Звичайний',
+    'date': 'Посортований за датою',
+    'amount': 'Посортований за кількістю',
+}
 
 
 async def generate_user_history_days(user_id: int, date: str):
@@ -13,7 +19,7 @@ async def generate_user_history_days(user_id: int, date: str):
         if input_day == day:
             days_text += f"➡️ Ти тут ({day})\n"
         else:
-            days_text += f"📅 {index+1}. {day}\n"
+            days_text += f"📅 {index + 1}. {day}\n"
 
     if len(days) == 0:
         days_text += f"⚠️ <b>Немає</b> інформації на цей місяць"
@@ -23,6 +29,7 @@ async def generate_user_history_days(user_id: int, date: str):
            f"{days_text}"
 
     return text
+
 
 async def generate_user_history_day(user_id: str, date: str):
     history_income = await get_user_incomes_for_day(user_id, date)
@@ -39,7 +46,7 @@ async def generate_user_history_day(user_id: str, date: str):
             day_text += f"😔 <b>Немає</b> доходів на цей день\n\n"
         else:
             for index, income in enumerate(history_income):
-                day_text += f" <b>[{index+1}]</b> {income.description}  <code>+{income.amount}</code>🪙  \n"
+                day_text += f" <b>[{index + 1}]</b> {income.description}  <code>+{income.amount}</code>🪙  \n"
                 day_income += int(income.amount)
             day_text += f"\n📈 Загальні доходи: <b>+{day_income}</b>🪙\n\n"
 
@@ -50,7 +57,7 @@ async def generate_user_history_day(user_id: str, date: str):
             day_text += f"🥳 <b>Немає</b> витрат на цей день"
         else:
             for index, expense in enumerate(history_expense):
-                day_text += f" <b>[{index+1}]</b> {expense.description} <code>-{expense.amount}</code>🪙  \n"
+                day_text += f" <b>[{index + 1}]</b> {expense.description} <code>-{expense.amount}</code>🪙  \n"
                 day_expense += int(expense.amount)
             day_text += f"\n📉 Загальні витрати: <b>-{day_expense}</b>🪙\n\n"
 
@@ -70,7 +77,7 @@ def roll_switcher(is_plus, current_index, len_of_list):
         else:
             future_link = current_index - 1
     else:
-        if current_index == len_of_list-1:
+        if current_index == len_of_list - 1:
             future_link = 0
         else:
             future_link = current_index + 1

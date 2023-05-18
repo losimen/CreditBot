@@ -1,6 +1,7 @@
 from aiogram import Dispatcher, executor
 
 from db.db import init_db
+from excel import excel_generator
 from loader import dp, bot
 from config import ADMIN_ID
 
@@ -17,6 +18,7 @@ income_fsm.register_handlers_income_fsm(dp)
 
 async def on_startup(dp: Dispatcher):
     await init_db()
+    excel_generator.init_folders()
     await bot.send_message(chat_id=ADMIN_ID,
                            text="Bot has started")
 

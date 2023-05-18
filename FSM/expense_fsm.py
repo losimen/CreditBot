@@ -9,6 +9,7 @@ from db.queries.insert_query import insert_expense
 
 from menus.user_menus import main_menu_menu
 
+
 class ExpenseFSM(StatesGroup):
     expense_description = State()
     expense_amount = State()

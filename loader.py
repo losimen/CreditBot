@@ -2,7 +2,6 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.mongo import MongoStorage
 
 import certifi
-
 import config
 import logging
 

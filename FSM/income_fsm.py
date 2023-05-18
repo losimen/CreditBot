@@ -1,14 +1,12 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram import types, Dispatcher
-
 from db.types.income import Income
-
 from db.queries.insert_query import insert_income
 from db.queries.get_query import get_user_data
 from db.queries.update_query import update_user_balance
-
 from menus.user_menus import main_menu_menu
+
 
 class IncomeFSM(StatesGroup):
     income_description = State()

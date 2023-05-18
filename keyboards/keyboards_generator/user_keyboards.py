@@ -11,7 +11,7 @@ def main_menu_markup() -> types.InlineKeyboardMarkup:
                                            callback_data='mainMenu_addIncome')
 
     profile = types.InlineKeyboardButton(text='Профіль 🧑‍💻',
-                                            callback_data='mainMenu_profile')
+                                         callback_data='mainMenu_profile')
 
     keyboard.add(addExpense, addIncome)
     keyboard.add(profile)
@@ -57,7 +57,7 @@ def user_profile_markup() -> types.InlineKeyboardMarkup:
     reportAllTime = types.InlineKeyboardButton(text='Звіт за весь час 📅',
                                                callback_data='userProfileMenu_reportAllTime')
     back = types.InlineKeyboardButton(text="< Назад",
-                                            callback_data="mainMenu")
+                                      callback_data="mainMenu")
 
     keyboard.add(showBalance)
     keyboard.add(reportAllTime)
@@ -77,7 +77,7 @@ def user_report_markup() -> types.InlineKeyboardMarkup:
                                                callback_data='userReportMenu_sortByBalance')
 
     back = types.InlineKeyboardButton(text="< Назад",
-                                            callback_data="userProfileMenu")
+                                      callback_data="userProfileMenu")
 
     keyboard.add(defaultReport)
     keyboard.add(sortByDate)

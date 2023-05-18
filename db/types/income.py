@@ -1,6 +1,7 @@
 from datetime import datetime
 from db.types.type_interface import IType
 
+
 class Income(IType):
     user_id: int
     amount: float

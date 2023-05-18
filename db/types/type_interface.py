@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class IType(ABC):
     @abstractmethod
     def to_dict(self):

@@ -3,9 +3,6 @@ from aiogram import types
 from db.queries.get_query import get_user_history_for_month
 from loader import logger
 
-
-
-
 from menus import user_menus
 from system_functions.date_worker import extract_days, change_day, get_str_datetime
 from helpers import roll_switcher
