@@ -38,7 +38,6 @@ async def main_menu_callback(callback: types.CallbackQuery):
     elif callback_data == 'mainMenu_profile':
         await user_menus.user_profile_menu(callback.message)
 
-@dp.callback_query_handler(Text(startswith='controllerMenu'))
 async def controller_menu(callback: types.CallbackQuery):
     await delete_message(callback.message)
 
@@ -61,4 +60,5 @@ async def controller_menu(callback: types.CallbackQuery):
 
 def register_user_callback(dp):
     dp.register_callback_query_handler(main_menu_callback, Text(startswith='mainMenu'))
+    dp.register_callback_query_handler(controller_menu, Text(startswith='controllerMenu'))
     dp.register_callback_query_handler(void_call, Text(startswith='void'))
