@@ -7,7 +7,7 @@ from loader import dp, bot
 from FSM.expense_fsm import fsm_start_expense_form
 from FSM.income_fsm import fsm_start_income_form
 from menus import user_menus
-from menus.user_menus import user_balance_menu
+from menus.user_menus import user_statistic_menu
 from system_functions.callback_procedures import switch_day
 from system_functions.date_worker import get_current_datetime, add_months
 
@@ -26,13 +26,17 @@ async def main_menu_callback(callback: types.CallbackQuery):
     await callback.message.delete()
     callback_data = callback.data
 
-    if callback_data == 'mainMenu_addExpense':
+    if callback_data == 'mainMenu':
+        await user_menus.main_menu_menu(callback.message)
+    elif callback_data == 'mainMenu_addExpense':
         await fsm_start_expense_form(callback.message)
     elif callback_data == 'mainMenu_addIncome':
         await fsm_start_income_form(callback.message)
-    elif callback_data == 'mainMenu_showBalance':
+    elif callback_data == 'mainMenu_showStatistic':
         date = get_current_datetime()
-        await user_balance_menu(callback.message, callback.from_user.id, date)
+        await user_statistic_menu(callback.message, callback.message.chat.id, date)
+    elif callback_data == 'mainMenu_profile':
+        await user_menus.user_profile_menu(callback.message)
 
 @dp.callback_query_handler(Text(startswith='controllerMenu'))
 async def controller_menu(callback: types.CallbackQuery):
@@ -51,9 +55,9 @@ async def controller_menu(callback: types.CallbackQuery):
         await callback.message.answer(text=f"{callback.message.text}\n\n {await generate_user_history_day(str(user_id), date)}",
                                       reply_markup=user_menus.keyboard_generator.date_controller_markup(user_id, date, True))
     elif call_ == 'monthRight':
-        await user_menus.user_balance_menu(callback.message, user_id, add_months(date, 1))
+        await user_menus.user_statistic_menu(callback.message, user_id, add_months(date, 1))
     elif call_ == 'monthLeft':
-        await user_menus.user_balance_menu(callback.message, user_id, add_months(date, -1))
+        await user_menus.user_statistic_menu(callback.message, user_id, add_months(date, -1))
 
 def register_user_callback(dp):
     dp.register_callback_query_handler(main_menu_callback, Text(startswith='mainMenu'))

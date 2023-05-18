@@ -10,11 +10,14 @@ def main_menu_markup() -> types.InlineKeyboardMarkup:
     addIncome = types.InlineKeyboardButton(text='Додати прибуток 💰',
                                            callback_data='mainMenu_addIncome')
 
-    showBalance = types.InlineKeyboardButton(text='Показати баланс 💵',
-                                             callback_data='mainMenu_showBalance')
+    showBalance = types.InlineKeyboardButton(text='Показати стастистику 📄',
+                                             callback_data='mainMenu_showStatistic')
+
+    profile = types.InlineKeyboardButton(text='Профіль 🧑‍💻',
+                                            callback_data='mainMenu_profile')
 
     keyboard.add(addExpense, addIncome)
-    keyboard.add(showBalance)
+    keyboard.add(showBalance, profile)
     return keyboard
 
 
@@ -42,5 +45,17 @@ def date_controller_markup(user_id: int, date: str, is_info: bool) -> types.Inli
     else:
         keyboard.add(types.InlineKeyboardButton(text=f"Інформація за {date.split(' ')[0]}",
                                                 callback_data="void"))
+
+    keyboard.add(types.InlineKeyboardButton(text="< Назад",
+                                            callback_data="mainMenu"))
+
+    return keyboard
+
+
+def user_profile_markup() -> types.InlineKeyboardMarkup:
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+
+    keyboard.add(types.InlineKeyboardButton(text="< Назад",
+                                            callback_data="mainMenu"))
 
     return keyboard

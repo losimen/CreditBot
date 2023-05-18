@@ -23,7 +23,7 @@ async def switch_day(message, is_up, user_id, date):
     days = list(sorted(extract_days([get_str_datetime(x.date) for x in history])))
 
     if len(days) == 0:
-        await user_menus.user_balance_menu(message, user_id, date)
+        await user_menus.user_statistic_menu(message, user_id, date)
         return
 
     input_day = list(extract_days([date]))[0]
@@ -33,6 +33,6 @@ async def switch_day(message, is_up, user_id, date):
     except ValueError:
         index_input_day = -1
 
-    new_day = int(days[roll_switcher(is_up, index_input_day, len(days))])
+    new_day = days[roll_switcher(is_up, index_input_day, len(days))]
 
-    await user_menus.user_balance_menu(message, user_id, change_day(date, new_day))
+    await user_menus.user_statistic_menu(message, user_id, change_day(date, new_day))
