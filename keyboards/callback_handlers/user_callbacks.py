@@ -7,7 +7,6 @@ from loader import dp, bot
 from FSM.expense_fsm import fsm_start_expense_form
 from FSM.income_fsm import fsm_start_income_form
 from menus import user_menus
-from menus.user_menus import user_statistic_menu
 from system_functions.callback_procedures import switch_day
 from system_functions.date_worker import get_current_datetime, add_months
 
@@ -32,13 +31,10 @@ async def main_menu_callback(callback: types.CallbackQuery):
         await fsm_start_expense_form(callback.message)
     elif callback_data == 'mainMenu_addIncome':
         await fsm_start_income_form(callback.message)
-    elif callback_data == 'mainMenu_showStatistic':
-        date = get_current_datetime()
-        await user_statistic_menu(callback.message, callback.message.chat.id, date)
     elif callback_data == 'mainMenu_profile':
         await user_menus.user_profile_menu(callback.message)
 
-async def controller_menu(callback: types.CallbackQuery):
+async def controller_menu_callback(callback: types.CallbackQuery):
     await delete_message(callback.message)
 
     split_call = callback.data.split('_')
@@ -58,7 +54,35 @@ async def controller_menu(callback: types.CallbackQuery):
     elif call_ == 'monthLeft':
         await user_menus.user_statistic_menu(callback.message, user_id, add_months(date, -1))
 
+
+async def user_profile_menu_callback(callback: types.CallbackQuery):
+    await delete_message(callback.message)
+
+    if callback.data == 'userProfileMenu':
+        await user_menus.user_profile_menu(callback.message)
+    elif callback.data == 'userProfileMenu_showStatistic':
+        date = get_current_datetime()
+        await user_menus.user_statistic_menu(callback.message, callback.message.chat.id, date)
+    elif callback.data == 'userProfileMenu_reportAllTime':
+        await user_menus.user_report_menu(callback.message)
+
+
+
+async def user_report_menu_callback(callback: types.CallbackQuery):
+    await delete_message(callback.message)
+
+    if callback.data == 'userReportMenu':
+        await user_menus.user_report_menu(callback.message)
+    elif callback.data == "userReportMenu_defaultReport":
+        pass
+    elif callback.data == "userReportMenu_sortByDate":
+        pass
+    elif callback.data == "userReportMenu_sortByBalance":
+        pass
+
+
 def register_user_callback(dp):
     dp.register_callback_query_handler(main_menu_callback, Text(startswith='mainMenu'))
-    dp.register_callback_query_handler(controller_menu, Text(startswith='controllerMenu'))
+    dp.register_callback_query_handler(controller_menu_callback, Text(startswith='controllerMenu'))
+    dp.register_callback_query_handler(user_profile_menu_callback, Text(startswith='userProfileMenu'))
     dp.register_callback_query_handler(void_call, Text(startswith='void'))

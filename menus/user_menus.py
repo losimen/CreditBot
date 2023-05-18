@@ -15,9 +15,11 @@ async def main_menu_menu(message: types.Message):
                              message.chat.last_name, message.chat.username)
         await insert_user(user_data)
 
-    await message.answer(text='Головне <b>меню</b> 💸\n\n'
+    await message.answer(text='Головне <b>меню:</b> 💸\n\n'
                               'Виберіть потрібний пункт меню 👇🏻',
                          reply_markup=keyboard_generator.main_menu_markup())
+
+
 async def user_statistic_menu(message: types.Message, user_id: int, date: str):
     await message.answer(text=f"{await generate_user_history_days(user_id, date)}\n\n",
                          reply_markup=keyboard_generator.date_controller_markup(user_id, date, False))
@@ -26,6 +28,12 @@ async def user_statistic_menu(message: types.Message, user_id: int, date: str):
 async def user_profile_menu(message: types.Message):
     user_data = await get_user_data(message.chat.id)
 
-    await message.answer(text='Ваш профіль 🧑🏻‍💻\n\n'
+    await message.answer(text='Ваш <b>профіль:</b> 🧑🏻‍💻\n\n'
                               f'<b>Ваш баланс:</b> <code>{user_data.balance}</code> 🪙\n',
                          reply_markup=keyboard_generator.user_profile_markup())
+
+
+async def user_report_menu(message: types.Message):
+    await message.answer(text='Оберіть найбільш <b>зручний</b> для вас <b>звіт</b> за <b>весь</b> час 📊\n\n'
+                              'Виберіть потрібний пункт меню 👇🏻',
+                         reply_markup=keyboard_generator.user_report_markup())
