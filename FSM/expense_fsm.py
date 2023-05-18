@@ -2,6 +2,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram import types, Dispatcher
 
+from db.queries.get_query import get_user_data
+from db.queries.update_query import update_user_balance
 from db.types.expense import Expense
 from db.queries.insert_query import insert_expense
 
@@ -29,8 +31,11 @@ async def fsm_expense_amount(message: types.Message, state: FSMContext):
     await message.answer(text='Витрата <b>додана</b> ✅')
     data = await state.get_data()
 
-    expense = Expense(message.from_user.id, data['expense_amount'], data['expense_description'], message.date)
+    expense = Expense(message.chat.id, data['expense_amount'], data['expense_description'], message.date)
+    user_data = await get_user_data(message.chat.id)
+
     await insert_expense(expense)
+    await update_user_balance(message.chat.id, float(user_data.balance) - float(data['expense_amount']))
 
     await state.finish()
     await main_menu_menu(message)

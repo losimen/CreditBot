@@ -3,7 +3,10 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram import types, Dispatcher
 
 from db.types.income import Income
+
 from db.queries.insert_query import insert_income
+from db.queries.get_query import get_user_data
+from db.queries.update_query import update_user_balance
 
 from menus.user_menus import main_menu_menu
 
@@ -29,8 +32,11 @@ async def fsm_income_amount(message: types.Message, state: FSMContext):
     await message.answer(text='Дохід <b>додано</b> ✅')
     data = await state.get_data()
 
-    income = Income(message.from_user.id, data['income_amount'], data['income_description'], message.date)
+    income = Income(message.chat.id, data['income_amount'], data['income_description'], message.date)
+    user_data = await get_user_data(message.chat.id)
+
     await insert_income(income)
+    await update_user_balance(message.chat.id, float(data['income_amount']) + float(user_data.balance))
 
     await state.finish()
     await main_menu_menu(message)
