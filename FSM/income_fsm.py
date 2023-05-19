@@ -26,6 +26,10 @@ async def fsm_income_description(message: types.Message, state: FSMContext):
 
 
 async def fsm_income_amount(message: types.Message, state: FSMContext):
+    if not message.text.isdigit():
+        await message.answer(text='Введіть <b>число</b> 🙄')
+        return
+
     await state.update_data(income_amount=message.text)
     await message.answer(text='Дохід <b>додано</b> ✅')
     data = await state.get_data()

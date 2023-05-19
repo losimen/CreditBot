@@ -28,6 +28,10 @@ async def fsm_expense_description(message: types.Message, state: FSMContext):
 
 
 async def fsm_expense_amount(message: types.Message, state: FSMContext):
+    if not message.text.isdigit():
+        await message.answer(text='Введіть <b>число</b> 🙄')
+        return
+
     await state.update_data(expense_amount=message.text)
     await message.answer(text='Витрата <b>додана</b> ✅')
     data = await state.get_data()
