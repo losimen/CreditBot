@@ -1,3 +1,5 @@
+import datetime
+
 from aiogram import types
 import keyboards.keyboards_generator.user_keyboards as keyboard_generator
 import excel.excel_generator as excel_generator
@@ -10,6 +12,7 @@ from system_functions.date_worker import get_current_datetime
 
 
 async def main_menu_menu(message: types.Message):
+    print('start - ', message.chat.id, ' | ', datetime.datetime.now())
     user_data = await get_user_data(message.chat.id)
     if not user_data:
         user_data = UserData(message.chat.id, message.chat.first_name,
