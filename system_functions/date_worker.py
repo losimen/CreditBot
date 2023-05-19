@@ -78,7 +78,7 @@ def extract_time(date: str):
 
 def change_day(date: str, day: str):
     dt = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
-    return dt.replace(day=day).strftime("%Y-%m-%d %H:%M:%S.%f")
+    return dt.replace(day=int(day)).strftime("%Y-%m-%d %H:%M:%S.%f")
 
 
 def add_months(date, months):
